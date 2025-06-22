@@ -16,16 +16,15 @@
 
 typedef struct s_args
 {
-    int philos;
-    int time_died;
-    int time_eat;
-    int time_sleep;
-    int meals;
+	int philos;
+	int time_died;
+	int time_eat;
+	int time_sleep;
+	int meals;
 
-    pthread_mutex_t forks[2];
-    int             index;
-    long             start_time;
-    // t_threads *th_forks;
+	pthread_mutex_t *forks[2];
+	int             index;
+	long             start_time;
 }   t_shared;
 
 
@@ -35,4 +34,10 @@ int	args_checker(char **arguments);
 
 void	threads_init_forks(pthread_mutex_t *Mforks, t_shared *data);
 pthread_mutex_t	*inite_Mfork(int philos);
+void	sleep_func(t_shared *data);
+void	eating_func(t_shared *data);
+long	get_times();
+void	convert_philos(t_shared *data);
+void	ft_usleep(int timer);
+void	think_func(t_shared *data);
 #endif

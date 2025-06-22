@@ -8,7 +8,9 @@ SRC = 	philo.c \
 		tools/ft_atoi.c \
 		tools/ft_isdigit.c\
 		little_parce.c\
-		inite_mutexes.c
+		inite_mutexes.c\
+		inite_functions.c\
+		tasks.c\
 
 
 OBJ = $(SRC:.c=.o)
