@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:09:59 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/22 15:12:01 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/22 21:52:47 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,38 +18,40 @@ void	*thread_func(void *inp)
 	data = (t_shared *)inp;
 	
 	if (data->index % 2 == 1)
-		ft_usleep(1);
+		timer_sleep(1, data->flag_die);
 	while (1)
 	{
 		pthread_mutex_lock(data->forks[0]);
 		printf("%ld %d has take left fork\n", get_times() - data->start_time, data->index);
 		pthread_mutex_lock(data->forks[1]);
 		printf("%ld %d has take right fork\n", get_times() - data->start_time, data->index);
-		eating_func(data);
+		if (eating_func(data) == 1)
+		{
+			break ;
+		}
 		pthread_mutex_unlock(data->forks[0]);
 		pthread_mutex_unlock(data->forks[1]);
-		sleep_func(data);
+		if (sleep_func(data) == 1)
+			break ;
 		think_func(data);
 	}
 	return (NULL);
 }
-// void	monitor_thread(t_shared *data)
-// {
-// 	pthread_t	monitor;
-// 	pthread_create(&monitor, NULL, &thread_func, &data);
-// 	pthread_join(monitor, NULL);
-// }
+
 void	threads_waiters(t_shared *data, pthread_t *threads)
 {
 	int	i;
 	int j;
+	long tmp;
+
 	j = 0;
 	i = 0;
-	long tmp;
 	tmp = get_times();
 	while (j != data->philos)
 	{
-		data[j].start_time = tmp; 
+		data[j].start_time = tmp;
+		data[j].last_time_eat = tmp;
+		data[j].flag_die = false;
 		j++;
 	}
 	monitor_thread(data);

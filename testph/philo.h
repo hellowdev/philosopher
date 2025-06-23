@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <limits.h>
+#include <stdbool.h>
 
 // typedef struct s_thread
 // {
@@ -21,6 +22,9 @@ typedef struct s_args
 	int time_eat;
 	int time_sleep;
 	int meals;
+	// monitor
+	int		last_time_eat;
+	bool	flag_die;
 
 	pthread_mutex_t *forks[2];
 	int             index;
@@ -34,10 +38,11 @@ int	args_checker(char **arguments);
 
 void	threads_init_forks(pthread_mutex_t *Mforks, t_shared *data);
 pthread_mutex_t	*inite_Mfork(int philos);
-void	sleep_func(t_shared *data);
-void	eating_func(t_shared *data);
+int		sleep_func(t_shared *data);
+int		eating_func(t_shared *data);
 long	get_times();
 void	convert_philos(t_shared *data);
-void	ft_usleep(int timer);
+int		timer_sleep(int timer, bool flag);
 void	think_func(t_shared *data);
+void	monitor_thread(t_shared *data);
 #endif

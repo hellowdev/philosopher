@@ -11,6 +11,7 @@ SRC = 	philo.c \
 		inite_mutexes.c\
 		inite_functions.c\
 		tasks.c\
+		monitor.c
 
 
 OBJ = $(SRC:.c=.o)
