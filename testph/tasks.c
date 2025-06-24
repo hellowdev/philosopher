@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:07:50 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/22 21:45:12 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/23 13:15:20 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	timer_sleep(int timer, bool flag)
 	while (get_times() - start < timer) // get_time = 1200 - 1000 = 200  | timer = 200ms 
 	{
 		if (flag == true)
-			return(1);
+			return (1);
 		usleep(500);
 	}
 	return (0);
@@ -36,7 +36,8 @@ int	timer_sleep(int timer, bool flag)
 
 int	eating_func(t_shared *data)
 {
-
+	if (data->flag_die)
+		return (1);
 	long eat = get_times();
 	data->last_time_eat = eat; // timestamp of each meal
 	eat = eat - data->start_time;
@@ -46,6 +47,8 @@ int	eating_func(t_shared *data)
 
 int	sleep_func(t_shared *data)
 {
+	if (data->flag_die)
+		return (1);
 	long sleep = get_times();
 	sleep = sleep - data->start_time;
 	printf("%ld %d is sleeping\n", sleep, data->index);
@@ -54,6 +57,8 @@ int	sleep_func(t_shared *data)
 
 void	think_func(t_shared *data)
 {
+	if (data->flag_die)
+		return ;
 	long think = get_times();
 	think = think - data->start_time;
 	printf("%ld %d is thinking\n", think, data->index);

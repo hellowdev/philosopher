@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:09:59 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/22 21:52:47 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/24 11:47:16 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ void	*thread_func(void *inp)
 	
 	if (data->index % 2 == 1)
 		timer_sleep(1, data->flag_die);
-	while (1)
+	while (data->flag_die != 1)
 	{
 		pthread_mutex_lock(data->forks[0]);
-		printf("%ld %d has take left fork\n", get_times() - data->start_time, data->index);
+		if (!data->flag_die)
+			printf("%ld %d has take left fork\n", get_times() - data->start_time, data->index);
 		pthread_mutex_lock(data->forks[1]);
-		printf("%ld %d has take right fork\n", get_times() - data->start_time, data->index);
+		if (!data->flag_die)
+			printf("%ld %d has take right fork\n", get_times() - data->start_time, data->index);
 		if (eating_func(data) == 1)
-		{
 			break ;
-		}
 		pthread_mutex_unlock(data->forks[0]);
 		pthread_mutex_unlock(data->forks[1]);
 		if (sleep_func(data) == 1)
@@ -43,6 +43,7 @@ void	threads_waiters(t_shared *data, pthread_t *threads)
 	int	i;
 	int j;
 	long tmp;
+	pthread_t	monitor;
 
 	j = 0;
 	i = 0;
@@ -54,7 +55,7 @@ void	threads_waiters(t_shared *data, pthread_t *threads)
 		data[j].flag_die = false;
 		j++;
 	}
-	monitor_thread(data);
+	pthread_create(&monitor, NULL, &monitor_func, data);
 	while (i != data->philos)
 	{
 		pthread_create(&threads[i], NULL, &thread_func, &data[i]);
@@ -66,6 +67,7 @@ void	threads_waiters(t_shared *data, pthread_t *threads)
 		pthread_join(threads[i], NULL);
 		i++;
 	}
+	pthread_join(monitor, NULL);
 }
 
 void	convert_philos(t_shared *data)

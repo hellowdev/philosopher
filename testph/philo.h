@@ -23,7 +23,7 @@ typedef struct s_args
 	int time_sleep;
 	int meals;
 	// monitor
-	int		last_time_eat;
+	long	last_time_eat;
 	bool	flag_die;
 
 	pthread_mutex_t *forks[2];
@@ -44,5 +44,6 @@ long	get_times();
 void	convert_philos(t_shared *data);
 int		timer_sleep(int timer, bool flag);
 void	think_func(t_shared *data);
-void	monitor_thread(t_shared *data);
+// void	monitor_thread(t_shared *data);
+void	*monitor_func(void *inp);
 #endif

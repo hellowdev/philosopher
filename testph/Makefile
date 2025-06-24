@@ -21,7 +21,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -pthread
 
-%.o : %.c minishell.h
+%.o : %.c philo.h
 	@$(CC) $(CFLAGS)  -c $< -o $@
 
 clean:
