@@ -9,11 +9,6 @@
 #include <limits.h>
 #include <stdbool.h>
 
-// typedef struct s_thread
-// {
-//     pthread_mutex_t forks[2];
-//     int             index; // total index 3 /// each index value [0][0] [1][1]
-// }   t_threads;
 
 typedef struct s_args
 {
@@ -22,14 +17,16 @@ typedef struct s_args
 	int time_eat;
 	int time_sleep;
 	int meals;
+	pthread_mutex_t	*mute_dead;
+	pthread_mutex_t	*mutex_print;
+	pthread_mutex_t	*mutex_meals;
 	// monitor
 	long	last_time_eat;
-	bool	flag_die;
+	bool	*check_die;
 
-	pthread_mutex_t *mutex_print;
 	pthread_mutex_t *forks[2];
 	int             index;
-	long             start_time;
+	long            start_time;
 }   t_shared;
 
 
@@ -43,9 +40,8 @@ int		sleep_func(t_shared *data);
 int		eating_func(t_shared *data);
 long	get_times();
 void	convert_philos(t_shared *data);
-int		timer_sleep(int timer, bool flag);
+int		timer_sleep(int timer, t_shared *data);
 void	think_func(t_shared *data);
-// void	monitor_thread(t_shared *data);
 void	*monitor_func(void *inp);
-void	one_philo(t_shared *data);
+void	print_lock(t_shared *data, char *msg);
 #endif

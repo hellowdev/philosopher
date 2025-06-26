@@ -22,7 +22,6 @@ void    *thread_func(void *j)
     printf("her\n");
     while (f < 50000)
     {
-
         pthread_mutex_lock(data->threads.mute);
         f++;
         data->i++;
