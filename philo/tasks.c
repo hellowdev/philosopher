@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:07:50 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/23 13:15:20 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/26 10:51:12 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,5 @@ void	think_func(t_shared *data)
 {
 	if (data->flag_die)
 		return ;
-	long think = get_times();
-	think = think - data->start_time;
-	printf("%ld %d is thinking\n", think, data->index);
+	printf("%ld %d is thinking\n", get_times() - data->start_time, data->index);
 }

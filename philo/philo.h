@@ -26,6 +26,7 @@ typedef struct s_args
 	long	last_time_eat;
 	bool	flag_die;
 
+	pthread_mutex_t *mutex_print;
 	pthread_mutex_t *forks[2];
 	int             index;
 	long             start_time;
@@ -46,4 +47,5 @@ int		timer_sleep(int timer, bool flag);
 void	think_func(t_shared *data);
 // void	monitor_thread(t_shared *data);
 void	*monitor_func(void *inp);
+void	one_philo(t_shared *data);
 #endif

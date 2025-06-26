@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:09:59 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/26 10:20:23 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/26 10:36:15 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	*thread_func(void *inp)
 	t_shared	*data;
 	data = (t_shared *)inp;
 	
+	one_philo(data);
 	if (data->index % 2 == 1)
 		timer_sleep(1, data->flag_die);
 	while (data->flag_die != 1)

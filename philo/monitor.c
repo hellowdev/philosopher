@@ -6,11 +6,20 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 15:21:36 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/26 10:19:50 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/26 10:46:02 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	one_philo(t_shared *data)
+{
+	if (data->philos == 1)
+	{
+		printf("%ld %d has take left fork\n", get_times() - data->start_time, data->index);
+		timer_sleep(data->time_died, data);
+	}
+}
 
 void    set_dieflag(t_shared *data)
 {

@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 17:55:10 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/23 13:11:10 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/26 10:49:15 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,14 @@ pthread_mutex_t	*inite_Mfork(int philos)
 
 void	threads_init_forks(pthread_mutex_t *Mforks, t_shared *data)
 {
+	pthread_mutex_t	tmp_print;
 	int	i;
 
 	i = 0;
+	pthread_mutex_init(&tmp_print, NULL);
 	while (i != data->philos)
 	{
+		data[i].mutex_print = &tmp_print;
 		data[i].forks[0] = &Mforks[i];
 		if (i + 1 == data->philos) // if last thread
 			data[i].forks[1] = &Mforks[0]; // change the last thread's fork wih first thread's fork
