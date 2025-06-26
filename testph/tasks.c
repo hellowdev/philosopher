@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:07:50 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/26 17:20:15 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/26 18:24:15 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ long	get_times()
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-int	timer_sleep(int timer, t_shared *data)
+int	timer_sleep(int timer, t_notshared *data)
 {
 	long	start;
 	start = get_times(); // 1000
@@ -33,7 +33,7 @@ int	timer_sleep(int timer, t_shared *data)
 	return (0);
 }
 
-int	eating_func(t_shared *data)
+int	eating_func(t_notshared *data)
 {
 	
 	if (mute_loops(data))
@@ -45,7 +45,7 @@ int	eating_func(t_shared *data)
 	return (timer_sleep(data->time_eat, data));
 }
 
-int	sleep_func(t_shared *data)
+int	sleep_func(t_notshared *data)
 {
 	if (mute_loops(data))
 		return (1);
@@ -53,7 +53,7 @@ int	sleep_func(t_shared *data)
 	return (timer_sleep(data->time_sleep, data));
 }
 
-void	think_func(t_shared *data)
+void	think_func(t_notshared *data)
 {
 	if (mute_loops(data))
 		return ;

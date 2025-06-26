@@ -6,13 +6,13 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 15:21:36 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/26 17:27:47 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/26 18:24:15 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	mute_loops(t_shared *data)
+int	mute_loops(t_notshared *data)
 {
 	pthread_mutex_lock(data->mute_dead);
 	if (*data->check_die == 1)
@@ -21,7 +21,7 @@ int	mute_loops(t_shared *data)
 	return (0);
 }
 
-void	print_lock(t_shared *data, char *msg)
+void	print_lock(t_notshared *data, char *msg)
 {
 	pthread_mutex_lock(data->mutex_print);
 	if (mute_loops(data) != 1)
@@ -29,7 +29,7 @@ void	print_lock(t_shared *data, char *msg)
 	pthread_mutex_unlock(data->mutex_print);
 }
 
-void    set_dieflag(t_shared *data)
+void    set_dieflag(t_notshared *data)
 {
 	int	i;
 
@@ -43,7 +43,7 @@ void    set_dieflag(t_shared *data)
 	}
 }
 
-int	check_died(t_shared *data)
+int	check_died(t_notshared *data)
 {
 	pthread_mutex_lock(data->mutex_meals);
 	if ((get_times() - data->last_time_eat) >= data->time_died)
@@ -54,10 +54,10 @@ int	check_died(t_shared *data)
 
 void	*monitor_func(void *inp) 
 {
-	t_shared	*data;
+	t_notshared	*data;
 	int i;
 
-	data = (t_shared *)inp;
+	data = (t_notshared *)inp;
 	while (1)
 	{
 		i = 0;

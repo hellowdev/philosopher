@@ -6,13 +6,13 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:09:59 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/26 17:45:17 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/26 18:24:15 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	one_philo(t_shared *data)
+void	one_philo(t_notshared *data)
 {
 	if (data->philos == 1)
 	{
@@ -23,8 +23,8 @@ void	one_philo(t_shared *data)
 
 void	*thread_func(void *inp)
 {
-	t_shared	*data;
-	data = (t_shared *)inp;
+	t_notshared	*data;
+	data = (t_notshared *)inp;
 	
 	one_philo(data);
 	if (data->index % 2 == 1)
@@ -50,46 +50,44 @@ void	*thread_func(void *inp)
 	return (NULL);
 }
 
-void	threads_waiters(t_shared *data, pthread_t *threads)
+void	threads_waiters(t_notshared *data, pthread_t *threads)
 {
-	int	i;
-	int j;
-	int x;
-	long tmp;
+	int			i;
+	long 		tmp;
 	pthread_t	monitor;
 
-	j = 0;
-	x = 0;
 	i = 0;
 	tmp = get_times();
-	while (j != data->philos)
+	while (i != data->philos)
 	{
-		data[j].start_time = tmp;
-		data[j].last_time_eat = tmp;
-		j++;
+		data[i].start_time = tmp;
+		data[i].last_time_eat = tmp;
+		i++;
 	}
+	i = 0;
 	pthread_create(&monitor, NULL, &monitor_func, data);
 	while (i != data->philos)
 	{
 		pthread_create(&threads[i], NULL, &thread_func, &data[i]);
 		i++;
 	}
-	while (x != data->philos)
+	i = 0;
+	while (i != data->philos)
 	{
-		pthread_join(threads[x], NULL);
-		x++;
+		pthread_join(threads[i], NULL);
+		i++;
 	}
 	
 	pthread_join(monitor, NULL);
 }
 
-void	convert_philos(t_shared *data)
+void	convert_philos(t_notshared *data)
 {
 	pthread_t       *threads; // declaration of thread
-	pthread_mutex_t	*Mforks;
+	pthread_mutex_t	*mforks;
 
-	Mforks = inite_Mfork(data->philos);
+	mforks = inite_Mfork(data->philos);
 	threads = malloc(data->philos * sizeof(pthread_t));
-	threads_init_forks(Mforks, data);
+	threads_init_forks(mforks, data);
 	threads_waiters(data, threads);
 }

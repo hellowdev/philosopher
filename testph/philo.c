@@ -6,26 +6,30 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 11:00:45 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/26 13:12:24 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/26 18:32:00 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-t_shared	*true_args(char **args, t_mutexes *mute)
+t_notshared	*true_args(char **args, t_shared *mute)
 {
-	t_shared	*data;
+	t_notshared	*data;
 	int			i;
 
 	i = 0;
 	
-	data = malloc(ft_atoi(args[1]) * sizeof(t_shared));
+	data = malloc(ft_atoi(args[1]) * sizeof(t_notshared));
 	while (i != ft_atoi(args[1]))
 	{
+		// WE SHARED HERE THESE MUTEX VARIABLE WITH A NON SHARED STRUCT,
+		// CUZ WE NEED ALL THREADS KNOW THESE VARIABLES BY SHARED THEM WITH THIS WAY
+		// AND LOCK AND UNLOCK THEM OR PLAY WITH THEM..
 		data[i].mute_dead = &mute->flag;
 		data[i].check_die = &mute->checker;
 		data[i].mutex_print = &mute->write_init;
 		data[i].mutex_meals = &mute->meals;
+		// -------------------------------- //
 		data[i].philos = ft_atoi(args[1]);
 		data[i].time_died = ft_atoi(args[2]);
 		data[i].time_eat = ft_atoi(args[3]);
@@ -39,8 +43,8 @@ t_shared	*true_args(char **args, t_mutexes *mute)
 
 int main(int ac, char **av)
 {
-	t_shared		*data;
-	t_mutexes		mute;
+	t_notshared		*data;
+	t_shared		mute;
 
 	mute.checker = false;
 	pthread_mutex_init(&mute.flag, NULL);

@@ -26,7 +26,7 @@ typedef struct s_args
 	pthread_mutex_t *forks[2];
 	int             index;
 	long            start_time;
-}   t_shared;
+}   t_notshared;
 
 typedef struct s_mute
 {
@@ -34,22 +34,22 @@ typedef struct s_mute
 	pthread_mutex_t write_init;
 	pthread_mutex_t	meals;
 	bool			checker;
-}	t_mutexes;
+}	t_shared;
 
 
 int	ft_atoi(const char *str);
 int	ft_isdigit(int c);
 int	args_checker(char **arguments);
 
-void	threads_init_forks(pthread_mutex_t *Mforks, t_shared *data);
+void	threads_init_forks(pthread_mutex_t *Mforks, t_notshared *data);
 pthread_mutex_t	*inite_Mfork(int philos);
-int		sleep_func(t_shared *data);
-int		eating_func(t_shared *data);
+int		sleep_func(t_notshared *data);
+int		eating_func(t_notshared *data);
 long	get_times();
-void	convert_philos(t_shared *data);
-int		timer_sleep(int timer, t_shared *data);
-void	think_func(t_shared *data);
+void	convert_philos(t_notshared *data);
+int		timer_sleep(int timer, t_notshared *data);
+void	think_func(t_notshared *data);
 void	*monitor_func(void *inp);
-void	print_lock(t_shared *data, char *msg);
-int	mute_loops(t_shared *data);
+void	print_lock(t_notshared *data, char *msg);
+int		mute_loops(t_notshared *data);
 #endif
