@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:07:50 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/26 12:15:59 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/26 17:20:15 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,9 @@ int	timer_sleep(int timer, t_shared *data)
 	start = get_times(); // 1000
 	while (get_times() - start < timer) // get_time = 1200 - 1000 = 200  | timer = 200ms 
 	{
-		pthread_mutex_lock(data->mute_dead);
-		if (*data->check_die == true)
-			return (pthread_mutex_unlock(data->mute_dead), 1);
-		pthread_mutex_unlock(data->mute_dead);
-		usleep(100);
+		if (mute_loops(data))
+			return (1);
+		usleep(200);
 	}
 	return (0);
 }
@@ -38,33 +36,26 @@ int	timer_sleep(int timer, t_shared *data)
 int	eating_func(t_shared *data)
 {
 	
-	pthread_mutex_lock(data->mute_dead);
-	if (*data->check_die)
-		return (pthread_mutex_unlock(data->mute_dead), 1);
-	pthread_mutex_unlock(data->mute_dead);
-	data->last_time_eat = get_times(); // timestamp of each meal
+	if (mute_loops(data))
+		return (1);
+	pthread_mutex_lock(data->mutex_meals);
+	data->last_time_eat = get_times();
+	pthread_mutex_unlock(data->mutex_meals);
 	print_lock(data, "is eating");
 	return (timer_sleep(data->time_eat, data));
 }
 
 int	sleep_func(t_shared *data)
 {
-	pthread_mutex_lock(data->mute_dead);
-	if (*data->check_die)
-		return (pthread_mutex_unlock(data->mute_dead), 1);
-	pthread_mutex_unlock(data->mute_dead);
+	if (mute_loops(data))
+		return (1);
 	print_lock(data, "is sleeping");
 	return (timer_sleep(data->time_sleep, data));
 }
 
 void	think_func(t_shared *data)
 {
-	pthread_mutex_lock(data->mute_dead);
-	if (*data->check_die)
-	{
-		pthread_mutex_unlock(data->mute_dead);
+	if (mute_loops(data))
 		return ;
-	}
-	pthread_mutex_unlock(data->mute_dead);
 	print_lock(data, "is thinking");
 }

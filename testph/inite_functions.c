@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:09:59 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/26 12:07:47 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/26 17:45:17 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,23 @@ void	*thread_func(void *inp)
 	
 	one_philo(data);
 	if (data->index % 2 == 1)
-		timer_sleep(1, data);
-	while (data->philos != 1 && *data->check_die != 1)
+		timer_sleep(5, data);
+	while (data->philos != 1 && mute_loops(data) != 1)
 	{
 		pthread_mutex_lock(data->forks[0]);
 		print_lock(data, "has take left fork");
-		// printf("%ld %d has take left fork\n", get_times() - data->start_time, data->index);
 		pthread_mutex_lock(data->forks[1]);
 		print_lock(data, "has take right fork");
-		// printf("%ld %d has take right fork\n", get_times() - data->start_time, data->index);
 		if (eating_func(data) == 1)
 		{
 			pthread_mutex_unlock(data->forks[0]);
 			pthread_mutex_unlock(data->forks[1]);
-			// printf("here %d\n", data->index);
 			return (NULL);
 		}
 		pthread_mutex_unlock(data->forks[0]);
 		pthread_mutex_unlock(data->forks[1]);
 		if (sleep_func(data) == 1)
-		{
 			return (NULL);
-		}
 		think_func(data);
 	}
 	return (NULL);

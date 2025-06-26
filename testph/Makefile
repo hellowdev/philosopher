@@ -1,6 +1,6 @@
 CC = cc
-# -fsanitize=thread -g
-CFLAGS = -Wall -Wextra -Werror 
+
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread -g
 
 NAME = philo
 
@@ -19,7 +19,7 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -pthread
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) #-pthread
 
 %.o : %.c philo.h
 	@$(CC) $(CFLAGS)  -c $< -o $@

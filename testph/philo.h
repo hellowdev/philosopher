@@ -12,22 +12,29 @@
 
 typedef struct s_args
 {
-	int philos;
-	int time_died;
-	int time_eat;
-	int time_sleep;
-	int meals;
+	int 			philos;
+	int 			time_died;
+	int 			time_eat;
+	int 			time_sleep;
+	int 			meals;
+	long			last_time_eat;
+	bool			*check_die;
 	pthread_mutex_t	*mute_dead;
 	pthread_mutex_t	*mutex_print;
 	pthread_mutex_t	*mutex_meals;
-	// monitor
-	long	last_time_eat;
-	bool	*check_die;
 
 	pthread_mutex_t *forks[2];
 	int             index;
 	long            start_time;
 }   t_shared;
+
+typedef struct s_mute
+{
+	pthread_mutex_t flag;
+	pthread_mutex_t write_init;
+	pthread_mutex_t	meals;
+	bool			checker;
+}	t_mutexes;
 
 
 int	ft_atoi(const char *str);
@@ -44,4 +51,5 @@ int		timer_sleep(int timer, t_shared *data);
 void	think_func(t_shared *data);
 void	*monitor_func(void *inp);
 void	print_lock(t_shared *data, char *msg);
+int	mute_loops(t_shared *data);
 #endif
