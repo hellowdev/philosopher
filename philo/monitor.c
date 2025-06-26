@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 15:21:36 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/23 13:39:59 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/26 10:19:50 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,9 @@ void	*monitor_func(void *inp)
 		{
 			if ((get_times() - data[i].last_time_eat) >= data[i].time_died)
 			{
-				printf("%ld %d is died\n", get_times() - data->start_time, data->index);
-				return (set_dieflag(data), NULL);
+				set_dieflag(data);
+				printf("%ld %d is died\n", get_times() - data[i].start_time, data[i].index);
+				return (NULL);
 			}
 			i++;
 		}

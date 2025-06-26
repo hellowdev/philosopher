@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:09:59 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/24 11:47:16 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/26 10:20:23 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,11 @@ void	*thread_func(void *inp)
 		if (!data->flag_die)
 			printf("%ld %d has take right fork\n", get_times() - data->start_time, data->index);
 		if (eating_func(data) == 1)
+		{
+			pthread_mutex_unlock(data->forks[0]);
+			pthread_mutex_unlock(data->forks[1]);	
 			break ;
+		}
 		pthread_mutex_unlock(data->forks[0]);
 		pthread_mutex_unlock(data->forks[1]);
 		if (sleep_func(data) == 1)
