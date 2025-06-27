@@ -17,6 +17,7 @@ typedef struct s_args
 	int 			time_eat;
 	int 			time_sleep;
 	int 			meals;
+	int				count_meals;
 	long			last_time_eat;
 	bool			*check_die;
 	pthread_mutex_t	*mute_dead;
@@ -50,6 +51,7 @@ void	convert_philos(t_notshared *data);
 int		timer_sleep(int timer, t_notshared *data);
 void	think_func(t_notshared *data);
 void	*monitor_func(void *inp);
-void	print_lock(t_notshared *data, char *msg);
+void	print_msg(t_notshared *data, char *msg);
 int		mute_loops(t_notshared *data);
+void	destroy_mutexes(int t, pthread_mutex_t *mforks);
 #endif

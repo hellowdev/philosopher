@@ -6,49 +6,57 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 15:21:36 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/26 18:24:15 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/27 18:08:08 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	mute_loops(t_notshared *data)
+void    set_dieflag(t_notshared *data)
 {
 	pthread_mutex_lock(data->mute_dead);
-	if (*data->check_die == 1)
-		return (pthread_mutex_unlock(data->mute_dead), 1);
+	*data->check_die = true;
 	pthread_mutex_unlock(data->mute_dead);
-	return (0);
 }
 
-void	print_lock(t_notshared *data, char *msg)
-{
-	pthread_mutex_lock(data->mutex_print);
-	if (mute_loops(data) != 1)
-		printf("%ld %d %s\n", get_times() - data->start_time, data->index, msg);
-	pthread_mutex_unlock(data->mutex_print);
-}
-
-void    set_dieflag(t_notshared *data)
+int	eat_allmeals(t_notshared *data)
 {
 	int	i;
 
 	i = 0;
-	while (i != data->philos)
+	if (data->meals != -1)
 	{
-		pthread_mutex_lock(data->mute_dead);
-		*data[i].check_die = true;
-		pthread_mutex_unlock(data->mute_dead);
-		i++;
+		while (i != data->philos)
+		{
+			pthread_mutex_lock(data->mutex_meals);
+			if (data[i].count_meals < data[i].meals)
+				return (pthread_mutex_unlock(data->mutex_meals), 0);
+			pthread_mutex_unlock(data->mutex_meals);
+			i++;
+		}
+		return (1);
 	}
+	return (0);
 }
 
 int	check_died(t_notshared *data)
 {
 	pthread_mutex_lock(data->mutex_meals);
 	if ((get_times() - data->last_time_eat) >= data->time_died)
+	{
+		set_dieflag(data);
+		pthread_mutex_lock(data->mutex_print);
+		printf("%ld %d is died\n", get_times() - data->start_time, data->index);
+		pthread_mutex_unlock(data->mutex_print);
 		return (pthread_mutex_unlock(data->mutex_meals), 1);
-	pthread_mutex_unlock(data->mutex_meals);
+	}
+	pthread_mutex_unlock(data->mutex_meals);	
+	if (eat_allmeals(data))
+	{
+		pthread_mutex_lock(data->mute_dead);
+		*data->check_die = true;
+		return (pthread_mutex_unlock(data->mute_dead), 1);
+	}
 	return (0);
 }
 
@@ -63,16 +71,8 @@ void	*monitor_func(void *inp)
 		i = 0;
 		while (i != data->philos)
 		{	
-			
 			if (check_died(&data[i]))
-			{
-				set_dieflag(data);
-				pthread_mutex_lock(data->mutex_print);
-				printf("%ld %d is died\n", get_times() - data->start_time, data[i].index);
-				pthread_mutex_unlock(data->mutex_print);
 				return (NULL);
-			}
-			
 			i++;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:07:50 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/26 18:24:15 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/27 18:04:37 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,20 @@ int	timer_sleep(int timer, t_notshared *data)
 	{
 		if (mute_loops(data))
 			return (1);
-		usleep(200);
+		usleep(500);
 	}
 	return (0);
 }
 
 int	eating_func(t_notshared *data)
 {
-	
 	if (mute_loops(data))
 		return (1);
 	pthread_mutex_lock(data->mutex_meals);
 	data->last_time_eat = get_times();
+	data->count_meals++;
 	pthread_mutex_unlock(data->mutex_meals);
-	print_lock(data, "is eating");
+	print_msg(data, "is eating");
 	return (timer_sleep(data->time_eat, data));
 }
 
@@ -49,7 +49,7 @@ int	sleep_func(t_notshared *data)
 {
 	if (mute_loops(data))
 		return (1);
-	print_lock(data, "is sleeping");
+	print_msg(data, "is sleeping");
 	return (timer_sleep(data->time_sleep, data));
 }
 
@@ -57,5 +57,5 @@ void	think_func(t_notshared *data)
 {
 	if (mute_loops(data))
 		return ;
-	print_lock(data, "is thinking");
+	print_msg(data, "is thinking");
 }

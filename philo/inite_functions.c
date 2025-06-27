@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:09:59 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/26 18:24:15 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/27 18:54:25 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ void	*thread_func(void *inp)
 	
 	one_philo(data);
 	if (data->index % 2 == 1)
-		timer_sleep(5, data);
+		timer_sleep(3, data);
 	while (data->philos != 1 && mute_loops(data) != 1)
 	{
 		pthread_mutex_lock(data->forks[0]);
-		print_lock(data, "has take left fork");
+		print_msg(data, "has take left fork");
 		pthread_mutex_lock(data->forks[1]);
-		print_lock(data, "has take right fork");
+		print_msg(data, "has take right fork");
 		if (eating_func(data) == 1)
 		{
 			pthread_mutex_unlock(data->forks[0]);
@@ -53,41 +53,40 @@ void	*thread_func(void *inp)
 void	threads_waiters(t_notshared *data, pthread_t *threads)
 {
 	int			i;
-	long 		tmp;
 	pthread_t	monitor;
 
 	i = 0;
-	tmp = get_times();
+	if (pthread_create(&monitor, NULL, &monitor_func, data) != 0)
+		return ;
 	while (i != data->philos)
 	{
-		data[i].start_time = tmp;
-		data[i].last_time_eat = tmp;
-		i++;
-	}
-	i = 0;
-	pthread_create(&monitor, NULL, &monitor_func, data);
-	while (i != data->philos)
-	{
-		pthread_create(&threads[i], NULL, &thread_func, &data[i]);
+		if (pthread_create(&threads[i], NULL, &thread_func, &data[i]) != 0)
+			return ;
 		i++;
 	}
 	i = 0;
 	while (i != data->philos)
 	{
-		pthread_join(threads[i], NULL);
+		if (pthread_join(threads[i], NULL) != 0)
+			return ;
 		i++;
 	}
-	
 	pthread_join(monitor, NULL);
 }
 
 void	convert_philos(t_notshared *data)
 {
-	pthread_t       *threads; // declaration of thread
+	pthread_t       *threads;
 	pthread_mutex_t	*mforks;
+	int				i;
 
+	i = 0;
 	mforks = inite_Mfork(data->philos);
 	threads = malloc(data->philos * sizeof(pthread_t));
 	threads_init_forks(mforks, data);
 	threads_waiters(data, threads);
+	free(threads);
+	destroy_mutexes(data->philos, mforks);
+	free(mforks);
+	
 }
