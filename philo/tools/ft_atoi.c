@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/17 16:56:16 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/17 21:59:16 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/27 20:31:13 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,3 @@ int	ft_atoi(const char *str)
 	}
 	return ((int)(sign * result));
 }
-

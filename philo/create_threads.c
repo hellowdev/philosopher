@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   inite_functions.c                                  :+:      :+:    :+:   */
+/*   create_threads.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:09:59 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/27 18:54:25 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/27 20:25:25 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,26 @@ void	one_philo(t_notshared *data)
 {
 	if (data->philos == 1)
 	{
-		printf("%ld %d has take left fork\n", get_times() - data->start_time, data->index);
+		print_msg(data, "has taken a fork");
 		timer_sleep(data->time_died, data);
+		return ;
 	}
 }
 
 void	*thread_func(void *inp)
 {
 	t_notshared	*data;
+
 	data = (t_notshared *)inp;
-	
 	one_philo(data);
 	if (data->index % 2 == 1)
 		timer_sleep(3, data);
-	while (data->philos != 1 && mute_loops(data) != 1)
+	while (mute_loops(data) != 1)
 	{
 		pthread_mutex_lock(data->forks[0]);
-		print_msg(data, "has take left fork");
+		print_msg(data, "has taken a fork");
 		pthread_mutex_lock(data->forks[1]);
-		print_msg(data, "has take right fork");
+		print_msg(data, "has taken a fork");
 		if (eating_func(data) == 1)
 		{
 			pthread_mutex_unlock(data->forks[0]);
@@ -72,21 +73,4 @@ void	threads_waiters(t_notshared *data, pthread_t *threads)
 		i++;
 	}
 	pthread_join(monitor, NULL);
-}
-
-void	convert_philos(t_notshared *data)
-{
-	pthread_t       *threads;
-	pthread_mutex_t	*mforks;
-	int				i;
-
-	i = 0;
-	mforks = inite_Mfork(data->philos);
-	threads = malloc(data->philos * sizeof(pthread_t));
-	threads_init_forks(mforks, data);
-	threads_waiters(data, threads);
-	free(threads);
-	destroy_mutexes(data->philos, mforks);
-	free(mforks);
-	
 }

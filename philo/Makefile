@@ -1,6 +1,6 @@
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread -g
+CFLAGS = -Wall -Wextra -Werror
 
 NAME = philo
 
@@ -9,7 +9,7 @@ SRC = 	philo.c \
 		tools/ft_isdigit.c\
 		little_parce.c\
 		inite_mutexes.c\
-		inite_functions.c\
+		create_threads.c\
 		tasks.c\
 		locked_door.c\
 		monitor.c

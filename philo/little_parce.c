@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 20:12:18 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/17 21:56:42 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/27 20:24:42 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	num_check(char *arg, int i)
 
 int	other_check(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!ft_isdigit(str[i]) && str[i] != '-' && str[i] != '+')
@@ -40,12 +40,11 @@ int	other_check(char *str)
 		i++;
 	}
 	return (0);
-	
 }
 
 int	args_checker(char **arguments)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (arguments[1])
@@ -57,5 +56,4 @@ int	args_checker(char **arguments)
 		i++;
 	}
 	return (0);
-	
 }

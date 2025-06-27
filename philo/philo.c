@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 11:00:45 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/27 18:58:23 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/27 20:15:52 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,10 @@ t_notshared	*true_args(char **args, t_shared *mute)
 	data = malloc(ft_atoi(args[1]) * sizeof(t_notshared));
 	while (i != ft_atoi(args[1]))
 	{
-		// WE SHARED HERE THESE MUTEX VARIABLE WITH A NON SHARED STRUCT,
-		// CUZ WE NEED ALL THREADS KNOW THESE VARIABLES BY SHARED THEM WITH THIS WAY
-		// AND LOCK AND UNLOCK THEM OR PLAY WITH THEM..
 		data[i].mute_dead = &mute->flag;
 		data[i].check_die = &mute->checker;
 		data[i].mutex_print = &mute->write_init;
 		data[i].mutex_meals = &mute->meals;
-		// -------------------------------- //
 		data[i].count_meals = 0;
 		data[i].start_time = get_times();
 		data[i].last_time_eat = get_times();
@@ -56,16 +52,12 @@ t_notshared	*true_args(char **args, t_shared *mute)
 	}
 	return (data);
 }
-void	sys()
-{
-	system("leaks -q philo");
-}
-int main(int ac, char **av)
+
+int	main(int ac, char **av)
 {
 	t_notshared		*data;
 	t_shared		mute;
 
-	// atexit(sys);
 	if (ac == 5 || ac == 6)
 	{
 		if (args_checker(av) != 0)

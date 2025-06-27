@@ -6,13 +6,13 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 15:21:36 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/27 18:08:08 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/27 20:26:43 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void    set_dieflag(t_notshared *data)
+void	set_dieflag(t_notshared *data)
 {
 	pthread_mutex_lock(data->mute_dead);
 	*data->check_die = true;
@@ -50,7 +50,7 @@ int	check_died(t_notshared *data)
 		pthread_mutex_unlock(data->mutex_print);
 		return (pthread_mutex_unlock(data->mutex_meals), 1);
 	}
-	pthread_mutex_unlock(data->mutex_meals);	
+	pthread_mutex_unlock(data->mutex_meals);
 	if (eat_allmeals(data))
 	{
 		pthread_mutex_lock(data->mute_dead);
@@ -60,17 +60,17 @@ int	check_died(t_notshared *data)
 	return (0);
 }
 
-void	*monitor_func(void *inp) 
+void	*monitor_func(void *inp)
 {
 	t_notshared	*data;
-	int i;
+	int			i;
 
 	data = (t_notshared *)inp;
 	while (1)
 	{
 		i = 0;
 		while (i != data->philos)
-		{	
+		{
 			if (check_died(&data[i]))
 				return (NULL);
 			i++;
