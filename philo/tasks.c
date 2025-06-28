@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:07:50 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/27 20:29:48 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/28 12:26:35 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ long	get_times(void)
 {
 	struct timeval	time;
 
-	gettimeofday(&time, NULL);
+	if (gettimeofday(&time, NULL) == -1)
+		return (write(2, "Failed Time\n", 12), -1);
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 

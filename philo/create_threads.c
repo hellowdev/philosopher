@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 10:09:59 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/27 20:25:25 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/28 13:36:03 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,20 @@ void	threads_waiters(t_notshared *data, pthread_t *threads)
 
 	i = 0;
 	if (pthread_create(&monitor, NULL, &monitor_func, data) != 0)
-		return ;
+		return ((void)write(2, "Thread Not Created\n", 19));
 	while (i != data->philos)
 	{
 		if (pthread_create(&threads[i], NULL, &thread_func, &data[i]) != 0)
-			return ;
+			return ((void)write(2, "Thread Not Created\n", 19));
 		i++;
 	}
 	i = 0;
 	while (i != data->philos)
 	{
 		if (pthread_join(threads[i], NULL) != 0)
-			return ;
+			return ((void)write(2, "Thread Not Joined\n", 18));
 		i++;
 	}
-	pthread_join(monitor, NULL);
+	if (pthread_join(monitor, NULL) != 0)
+		return ((void)write(2, "Thread Not Joined\n", 18));
 }

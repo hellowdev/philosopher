@@ -6,7 +6,7 @@
 /*   By: ychedmi <ychedmi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 15:21:36 by ychedmi           #+#    #+#             */
-/*   Updated: 2025/06/27 20:26:43 by ychedmi          ###   ########.fr       */
+/*   Updated: 2025/06/28 13:15:51 by ychedmi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	eat_allmeals(t_notshared *data)
 		while (i != data->philos)
 		{
 			pthread_mutex_lock(data->mutex_meals);
-			if (data[i].count_meals < data[i].meals)
+			if (data[i].count_meals <= data[i].meals)
 				return (pthread_mutex_unlock(data->mutex_meals), 0);
 			pthread_mutex_unlock(data->mutex_meals);
 			i++;
